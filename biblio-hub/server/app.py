@@ -17,7 +17,7 @@ def index():
     return redirect(url_for('register'))
 
 
-@app.route('/register', methods=['POST'])
+@app.route('/register/', methods=['POST'])
 def register():
     email = request.get_json()['email']
     password = bcrypt.generate_password_hash(

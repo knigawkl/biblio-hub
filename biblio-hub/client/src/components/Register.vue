@@ -14,7 +14,7 @@
             <input id="password" type="password" v-model="password" class="form-control"
                    name="password" placeholder="Enter Password">
           </div>
-          <button class="btn btn-lg btn-primary btn-block">Register</button>
+          <button class="btn btn-lg btn-dark btn-block">Register</button>
         </form>
       </div>
     </div>
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+
 import axios from 'axios';
 
 export default {
@@ -33,7 +34,9 @@ export default {
   },
   methods: {
     register() {
-      axios.post('register/', {
+      const path = 'http://localhost:5000/register/';
+
+      axios.post(path, {
         email: this.email,
         password: this.password,
       }).then((res) => {
@@ -45,4 +48,5 @@ export default {
     },
   },
 };
+
 </script>

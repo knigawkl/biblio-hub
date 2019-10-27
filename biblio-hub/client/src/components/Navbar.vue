@@ -3,26 +3,3 @@
       <a href="#" class="pull-left"><img src="../assets/logo.png" width="50%" alt="logo"></a>
     </nav>
 </template>
-
-<script>
-import EventBus from './EventBus.vue';
-
-export default {
-  data() {
-    return {
-      auth: '',
-      user: '',
-    };
-  },
-  methods: {
-    logout() {
-      localStorage.removeItem('usertoken');
-    },
-  },
-  mounted() {
-    EventBus.$on('logged-in', (status) => {
-      this.auth = status;
-    });
-  },
-};
-</script>
