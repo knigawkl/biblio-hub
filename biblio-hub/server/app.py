@@ -3,7 +3,6 @@ from flask import Flask, jsonify, request, json, redirect, url_for
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 
-
 DEBUG = True
 
 app = Flask(__name__)
@@ -27,6 +26,8 @@ def register():
         'email': email,
         'password': password
     }
+    if email == "lukasz.knigawka@outlook.com":
+        return jsonify({'error': 'Email address already in the database'})
     return jsonify({'result': result})
 
 
