@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 CORS(app, resources={r'/*': {'origins': '*'}})
-bcrypt = Bcrypt(app)
+# bcrypt = Bcrypt(app)
 
 
 @app.route('/')
@@ -19,8 +19,8 @@ def index():
 @app.route('/register/', methods=['POST'])
 def register():
     login = request.get_json()['login']
-    password = bcrypt.generate_password_hash(
-        request.get_json()['password']).decode('utf-8')
+    # password = bcrypt.generate_password_hash(
+    #     request.get_json()['password']).decode('utf-8')
 
     if login == "lukasz":
         resp = jsonify('Login unavailable')
