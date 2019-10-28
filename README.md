@@ -11,4 +11,4 @@ A bibliography manager wannabe
 * npm run serve
 
 # docker setup - TODO :(
-
+Niestety, pomimo kilku prób, nie udało się postawić kontenerów do 28.10. 
