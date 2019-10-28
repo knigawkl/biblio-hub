@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request, json, redirect, url_for
-# from flask_mysqldb import MySQL
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 
@@ -19,16 +18,17 @@ def index():
 
 @app.route('/register/', methods=['POST'])
 def register():
-    email = request.get_json()['email']
+    login = request.get_json()['login']
     password = bcrypt.generate_password_hash(
         request.get_json()['password']).decode('utf-8')
-    result = {
-        'email': email,
-        'password': password
-    }
-    if email == "lukasz.knigawka@outlook.com":
-        return jsonify({'error': 'Email address already in the database'})
-    return jsonify({'result': result})
+
+    if login == "lukasz":
+        resp = jsonify('Login unavailable')
+    elif login == '':
+        resp = jsonify('Username is required field.')
+    else:
+        resp = jsonify('Username available')
+    return resp
 
 
 if __name__ == '__main__':
