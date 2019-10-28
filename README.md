@@ -12,3 +12,9 @@ A bibliography manager wannabe
 
 # docker setup - TODO :(
 Niestety, pomimo kilku prób, nie udało się postawić kontenerów do 28.10. 
+
+![alt text](https://github.com/knigawkl/biblio-hub/blob/develop/doc/screen.png)
+
+Tak wygląda aplikacja uruchomiona w środowisku deweloperskim. 
+Frontend komunikuje się z backendem.
+
