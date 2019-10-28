@@ -39,7 +39,7 @@ window.onload = () => {
 
   document.getElementById('login').addEventListener('change', (e) => {
     const input = e.target;
-    const path = 'http://localhost:5000/register/';
+    const path = '/register/';
     axios.post(path, {
       login: input.value,
       password: 'mock',
@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     register() {
-      const path = 'http://localhost:5000/register/';
+      const path = '/register/';
 
       axios.post(path, {
         login: this.login,
