@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, json, redirect, url_for
 from flask_cors import CORS
-from flask_bcrypt import Bcrypt
+# from flask_bcrypt import Bcrypt
 
 DEBUG = True
 
