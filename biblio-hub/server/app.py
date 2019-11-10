@@ -6,7 +6,7 @@ DEBUG = True
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-CORS(app, resources={r'/*': {'origins': '*'}})
+CORS(app)
 
 
 @app.route('/')
@@ -28,4 +28,4 @@ def register():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
