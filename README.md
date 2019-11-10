@@ -17,4 +17,4 @@ Niestety, pomimo kilku prób, nie udało się postawić kontenerów do 28.10.
 
 Tak wygląda aplikacja uruchomiona w środowisku deweloperskim. 
 Frontend komunikuje się z backendem.
-
+Przy pomocy asynchronicznych zapytań sprawdzany jest login.
