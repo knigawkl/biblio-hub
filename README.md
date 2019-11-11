@@ -7,3 +7,4 @@ A bibliography manager wannabe
 2) go to http://localhost:8080/ and start using app, mock existing login is <em>lukasz</em>
 
 Login field is asynchronously validated
+As for now, default branch is <em>develop</em>
