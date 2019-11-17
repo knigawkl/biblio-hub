@@ -6,7 +6,7 @@ COPY package*.json ./
 RUN npm install --production
 COPY . .
 RUN npm run build
-COPY ./nginx/default.conf /etc/nginx/nginx.conf
+# COPY ./nginx/default.conf /etc/nginx/nginx.conf
 
 # production stage
 # the second stage is responsible for serving such artifact using NGINX
