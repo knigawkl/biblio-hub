@@ -4,9 +4,14 @@
       <div class="col-md-6 mt-5 mx-auto">
         <form id="form" v-on:submit.prevent="register">
           <div class="form-group">
-            <label id="login_label" for="login">Login</label>
+            <label for="email">Email Address</label>
+            <input id="email" type="email" v-model="email" class="form-control" name="email"
+                   placeholder="Enter email">
+          </div>
+          <div class="form-group">
+            <label id="login_label" for="reg_login">Login</label>
             <div id="msg"></div>
-            <input id="login" type="text" v-model="login" class="form-control" name="login"
+            <input id="reg_login" type="text" v-model="login" class="form-control" name="reg_login"
                    placeholder="Enter login">
           </div>
           <div class="form-group">
@@ -28,6 +33,13 @@
 
 import axios from 'axios';
 
+if (localStorage.getItem('reloaded')) {
+  localStorage.removeItem('reloaded');
+} else {
+  localStorage.setItem('reloaded', '1');
+  window.location.reload();
+}
+
 window.onload = () => {
   document.getElementById('form').onkeypress = (e) => {
     if (e.key === 'Enter') {
@@ -39,7 +51,7 @@ window.onload = () => {
     e.preventDefault();
   });
 
-  document.getElementById('login').addEventListener('change', (e) => {
+  document.getElementById('reg_login').addEventListener('change', (e) => {
     const input = e.target;
     const path = 'http://localhost:5000/register/';
     axios.post(path, {
@@ -69,13 +81,11 @@ export default {
       const path = 'http://localhost:5000/register/';
 
       axios.post(path, {
-        login: this.login,
+        login: this.reg_login,
         password: this.password,
       }).then((resp) => {
         if (resp.data === 'Username available') {
           this.$router.push({ name: 'Login' });
-        } else {
-          alert('Cannot register with this login');
         }
       });
     },
