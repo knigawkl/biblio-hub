@@ -3,7 +3,6 @@
     <div class="row">
       <div class="col-md-6 mt-5 mx-auto">
         <form id="form" v-on:submit.prevent="register">
-          <h1 class="h3 mb-3 font-weight-normal">Register</h1>
           <div class="form-group">
             <label id="login_label" for="login">Login</label>
             <div id="msg"></div>
@@ -15,8 +14,11 @@
             <input id="password" type="password" v-model="password" class="form-control"
                    name="password" placeholder="Enter Password">
           </div>
-          <button type="submit" class="btn btn-lg btn-dark btn-block">Register</button>
+          <button type="submit" class="btn btn-sm btn-dark btn-block">Register</button>
         </form>
+        <span>
+          Click <a href="http://localhost:8081/#/login">here</a> to sign in with an existing account.
+        </span>
       </div>
     </div>
   </div>
