@@ -6,18 +6,18 @@
           <div class="form-group">
             <label for="email">Email Address</label>
             <input id="email" type="email" v-model="email" class="form-control" name="email"
-                   placeholder="Enter email">
+                   placeholder="Enter email" required>
           </div>
           <div class="form-group">
             <label id="login_label" for="reg_login">Login</label>
             <div id="msg"></div>
             <input id="reg_login" type="text" v-model="login" class="form-control" name="reg_login"
-                   placeholder="Enter login">
+                   placeholder="Enter login" required>
           </div>
           <div class="form-group">
             <label for="password">Password</label>
             <input id="password" type="password" v-model="password" class="form-control"
-                   name="password" placeholder="Enter Password">
+                   name="password" placeholder="Enter Password" required>
           </div>
           <button type="submit" class="btn btn-sm btn-dark btn-block">Register</button>
         </form>
@@ -32,13 +32,6 @@
 <script type="text/javascript">
 
 import axios from 'axios';
-
-if (localStorage.getItem('reloaded')) {
-  localStorage.removeItem('reloaded');
-} else {
-  localStorage.setItem('reloaded', '1');
-  window.location.reload();
-}
 
 window.onload = () => {
   document.getElementById('form').onkeypress = (e) => {
@@ -72,6 +65,7 @@ window.onload = () => {
 export default {
   data() {
     return {
+      email: '',
       login: '',
       password: '',
     };
@@ -81,6 +75,7 @@ export default {
       const path = 'http://localhost:5000/register/';
 
       axios.post(path, {
+        email: this.email,
         login: this.reg_login,
         password: this.password,
       }).then((resp) => {
