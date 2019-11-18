@@ -2,16 +2,16 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6 mt-5 mx-auto">
-        <form id="reg_form" v-on:submit.prevent="register">
+        <form id="form" v-on:submit.prevent="register">
           <div class="form-group">
             <label for="email">Email Address</label>
             <input id="email" type="email" v-model="email" class="form-control" name="email"
                    placeholder="Enter email" required>
           </div>
           <div class="form-group">
-            <label id="login_label" for="reg_login">Login</label>
+            <label id="login_label" for="login">Login</label>
             <div id="msg"></div>
-            <input id="reg_login" type="text" v-model="login" class="form-control" name="reg_login"
+            <input id="login" type="text" v-model="login" class="form-control" name="login"
                    placeholder="Enter login" required>
           </div>
           <div class="form-group">
@@ -34,22 +34,23 @@
 import axios from 'axios';
 
 window.onhashchange = () => {
-  document.getElementById('reg_form').onkeypress = (e) => {
+  document.getElementById('form').onkeypress = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
     }
   };
 
-  document.getElementById('reg_form').addEventListener('submit', (e) => {
+  document.getElementById('form').addEventListener('submit', (e) => {
     e.preventDefault();
   });
 
-  document.getElementById('reg_login').addEventListener('change', (e) => {
+  document.getElementById('login').addEventListener('change', (e) => {
     const input = e.target;
     const path = 'http://localhost:5000/register/';
     axios.post(path, {
       login: input.value,
       password: 'mock',
+      email: 'mock',
     }).then((response) => {
       if (response.data === 'Username available') {
         document.getElementById('login_label').innerHTML = 'Login available!';
@@ -76,7 +77,7 @@ export default {
 
       axios.post(path, {
         email: this.email,
-        login: this.reg_login,
+        login: this.login,
         password: this.password,
       }).then((resp) => {
         if (resp.data === 'Username available') {

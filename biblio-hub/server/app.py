@@ -11,7 +11,7 @@ CORS(app)
 
 @app.route('/')
 def index():
-    return redirect(url_for('register'))
+    return redirect(url_for('login'))
 
 
 @app.route('/register/', methods=['POST'])
