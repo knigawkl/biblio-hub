@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6 mt-5 mx-auto">
-        <form id="form" v-on:submit.prevent="login">
+        <form id="form" v-on:submit.prevent="signin">
           <div class="form-group">
             <label id="login_label" for="login">Login</label>
             <div id="msg"></div>
@@ -23,3 +23,23 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'login',
+  data() {
+    return {
+      login: '',
+      password: '',
+    };
+  },
+  methods: {
+    signin() {
+      this.$store.dispatch('retrieveToken', {
+        login: this.login,
+        password: this.password,
+      });
+    },
+  },
+};
+</script>
