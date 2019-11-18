@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6 mt-5 mx-auto">
-        <form id="form" v-on:submit.prevent="register">
+        <form id="reg_form" v-on:submit.prevent="register">
           <div class="form-group">
             <label for="email">Email Address</label>
             <input id="email" type="email" v-model="email" class="form-control" name="email"
@@ -33,14 +33,14 @@
 
 import axios from 'axios';
 
-window.onload = () => {
-  document.getElementById('form').onkeypress = (e) => {
+window.onhashchange = () => {
+  document.getElementById('reg_form').onkeypress = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
     }
   };
 
-  document.getElementById('form').addEventListener('submit', (e) => {
+  document.getElementById('reg_form').addEventListener('submit', (e) => {
     e.preventDefault();
   });
 
