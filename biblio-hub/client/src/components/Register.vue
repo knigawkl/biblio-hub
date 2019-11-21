@@ -56,7 +56,7 @@ window.onhashchange = () => {
         document.getElementById('login_label').innerHTML = 'Login available!';
         document.getElementById('login_label').style.color = 'green';
       } else {
-        document.getElementById('login_label').innerHTML = 'Login already in the database!';
+        document.getElementById('login_label').innerHTML = 'Login unavailable!';
         document.getElementById('login_label').style.color = 'red';
       }
     });
