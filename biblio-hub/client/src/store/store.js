@@ -35,9 +35,6 @@ export default new Vuex.Store({
     },
     retrieveToken(context, credentials) {
       return new Promise((resolve, reject) => {
-        console.log('jestem w storze');
-        console.log(credentials.login);
-        console.log(credentials.password);
         axios.post('http://localhost:5000/login/', {
           login: credentials.login,
           password: credentials.password,
