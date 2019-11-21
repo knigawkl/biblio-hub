@@ -4,7 +4,7 @@ import axios from 'axios';
 
 Vue.use(Vuex);
 
-export const store = new Vuex.Store({
+export default new Vuex.Store({
   state: {
     token: localStorage.getItem('access_token') || null,
   },
@@ -50,15 +50,18 @@ export const store = new Vuex.Store({
     },
     retrieveToken(context, credentials) {
       return new Promise((resolve, reject) => {
-        axios.post('/login', {
-          username: credentials.username,
+        console.log('jestem w storze');
+        console.log(credentials.login);
+        console.log(credentials.password);
+        axios.post('http://localhost:5000/login/', {
+          login: credentials.login,
           password: credentials.password,
         })
           .then((response) => {
-            const token = response.data.access_token;
-
-            localStorage.setItem('access_token', token);
-            context.commit('retrieveToken', token);
+            // const token = response.data.access_token;
+            console.log(response);
+            // localStorage.setItem('access_token', token);
+            // context.commit('retrieveToken', token);
             resolve(response);
           })
           .catch((error) => {
