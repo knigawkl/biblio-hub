@@ -54,6 +54,12 @@ def login():
                          {'WWW-Authenticate': 'Basic realm="Login required"'})
 
 
+@app.route("/logout/")
+@token_required
+def logout():
+    return make_response('Logged out', 200)
+
+
 @app.route('/hub/')
 @token_required
 def hub():
