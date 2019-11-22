@@ -2,13 +2,27 @@ import datetime
 import jwt
 from flask import Flask, jsonify, request, redirect, url_for, make_response
 from flask_cors import CORS
-
+from functools import wraps
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['SECRET_KEY'] = 'customerobsessed'
 
 CORS(app)
+
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.args.get('token')
+        if not token:
+            return jsonify({'message': 'Missing token'})
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'])
+        except:
+            return jsonify({'message': 'Invalid token'})
+        return f(*args, **kwargs)
+    return decorated
 
 
 @app.route('/')
@@ -41,8 +55,9 @@ def login():
 
 
 @app.route('/hub/')
+@token_required
 def hub():
-    return ''
+    return jsonify({'message': 'authorized'})
 
 
 if __name__ == '__main__':

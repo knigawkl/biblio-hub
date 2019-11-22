@@ -40,8 +40,8 @@ export default new Vuex.Store({
           password: credentials.password,
         }, { headers: { 'Content-Type': 'application/json' } })
           .then((response) => {
-            // const token = response.data.token;
-            // console.log(token);
+            const { token } = response.data;
+            console.log(token);
             // localStorage.setItem('access_token', token);
             // context.commit('retrieveToken', token);
             resolve(response);
