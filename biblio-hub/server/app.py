@@ -1,8 +1,12 @@
-from flask import Flask, jsonify, request, json, redirect, url_for
+import datetime
+import jwt
+from flask import Flask, jsonify, request, redirect, url_for, make_response
 from flask_cors import CORS
+
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+app.config['SECRET_KEY'] = 'customerobsessed'
 
 CORS(app)
 
@@ -24,12 +28,21 @@ def register():
 
 @app.route('/login/', methods=['POST'])
 def login():
-    login = request.get_json()['login']
-    if login == "lukasz":
-        resp = jsonify('Login unavailable')
-    else:
-        resp = jsonify('Username available')
-    return resp
+    auth = request.json
+
+    if auth and auth['password'] == 'password':
+        token = jwt.encode({'user': auth['login'],
+                            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)},
+                           app.config['SECRET_KEY'])
+        return jsonify({'token': token.decode('UTF-8')})
+
+    return make_response('Authorization failed', 401,
+                         {'WWW-Authenticate': 'Basic realm="Login required"'})
+
+
+@app.route('/hub/')
+def hub():
+    return ''
 
 
 if __name__ == '__main__':

@@ -38,7 +38,7 @@ export default new Vuex.Store({
         axios.post('http://localhost:5000/login/', {
           login: credentials.login,
           password: credentials.password,
-        })
+        }, { headers: { 'Content-Type': 'application/json' } })
           .then((response) => {
             // const token = response.data.access_token;
             console.log(response);
