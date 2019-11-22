@@ -31,6 +31,8 @@ export default {
     return {
       login: '',
       password: '',
+      serverError: '',
+      successMessage: '',
     };
   },
   methods: {
@@ -38,7 +40,16 @@ export default {
       this.$store.dispatch('retrieveToken', {
         login: this.login,
         password: this.password,
-      });
+      })
+        .then((response) => {
+          this.$router.push({ name: 'Hub' });
+          this.successMessage = response.data;
+        })
+        .catch((error) => {
+          this.serverError = error.response.data;
+          this.password = '';
+          this.successMessage = '';
+        });
     },
   },
 };

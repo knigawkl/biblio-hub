@@ -13,6 +13,14 @@ export default new Vuex.Store({
       return state.token !== null;
     },
   },
+  mutations: {
+    retrieveToken(state, token) {
+      state.token = token;
+    },
+    destroyToken(state) {
+      state.token = null;
+    },
+  },
   actions: {
     destroyToken(context) {
       axios.defaults.headers.common.Authorization += `Bearer ${context.state.token}`;
@@ -41,9 +49,8 @@ export default new Vuex.Store({
         }, { headers: { 'Content-Type': 'application/json' } })
           .then((response) => {
             const { token } = response.data;
-            console.log(token);
-            // localStorage.setItem('access_token', token);
-            // context.commit('retrieveToken', token);
+            localStorage.setItem('access_token', token);
+            context.commit('retrieveToken', token);
             resolve(response);
           })
           .catch((error) => {
