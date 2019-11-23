@@ -33,33 +33,35 @@
 import axios from 'axios';
 
 window.onkeyup = () => {
-  document.getElementById('reg_form').onkeypress = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-    }
-  };
-
-  document.getElementById('reg_form').addEventListener('submit', (e) => {
-    e.preventDefault();
-  });
-
-  document.getElementById('reg_login').addEventListener('change', (e) => {
-    const input = e.target;
-    const path = 'http://localhost:5000/register/';
-    axios.post(path, {
-      login: input.value,
-      password: 'mock',
-      email: 'mock',
-    }).then((response) => {
-      if (response.data === 'Username available') {
-        document.getElementById('login_label').innerHTML = 'Login available!';
-        document.getElementById('login_label').style.color = 'green';
-      } else {
-        document.getElementById('login_label').innerHTML = 'Login unavailable!';
-        document.getElementById('login_label').style.color = 'red';
+  if (document.getElementById('reg_form') != null) {
+    document.getElementById('reg_form').onkeypress = (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
       }
+    };
+
+    document.getElementById('reg_form').addEventListener('submit', (e) => {
+      e.preventDefault();
     });
-  });
+
+    document.getElementById('reg_login').addEventListener('change', (e) => {
+      const input = e.target;
+      const path = 'http://localhost:5000/register/';
+      axios.post(path, {
+        login: input.value,
+        password: 'mock',
+        email: 'mock',
+      }).then((response) => {
+        if (response.data === 'Username available') {
+          document.getElementById('login_label').innerHTML = 'Login available!';
+          document.getElementById('login_label').style.color = 'green';
+        } else {
+          document.getElementById('login_label').innerHTML = 'Login unavailable!';
+          document.getElementById('login_label').style.color = 'red';
+        }
+      });
+    });
+  }
 };
 
 export default {
