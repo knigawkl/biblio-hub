@@ -16,9 +16,6 @@
           </div>
           <button type="submit" class="btn btn-sm btn-dark btn-block">Sign in</button>
         </form>
-        <span>
-          Click <a href="http://localhost:8081/#/register">here</a> to create a new account.
-        </span>
       </div>
     </div>
   </div>

@@ -9,14 +9,14 @@
   </div>
   <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
     <ul class="navbar-nav ml-auto">
-      <li v-if="!loggedIn">
-        <router-link :to="{ name: 'Login' }">Sign in</router-link>
+      <li v-if="!loggedIn" class="nav-item">
+        <router-link class="nav-link" :to="{ name: 'Login' }">Sign in</router-link>
       </li>
-      <li v-if="!loggedIn">
-        <router-link :to="{ name: 'Register' }">Sign up</router-link>
+      <li v-if="!loggedIn" class="nav-item">
+        <router-link class="nav-link" :to="{ name: 'Register' }">Sign up</router-link>
       </li>
-      <li v-if="loggedIn">
-        <router-link :to="{ name: 'Logout' }">Log out</router-link>
+      <li v-if="loggedIn" class="nav-item">
+        <router-link class="nav-link" :to="{ name: 'Logout' }">Log out</router-link>
       </li>
     </ul>
   </div>

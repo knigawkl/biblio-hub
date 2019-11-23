@@ -21,9 +21,6 @@
           </div>
           <button type="submit" class="btn btn-sm btn-dark btn-block">Register</button>
         </form>
-        <span>
-          Click <a href="http://localhost:8081/#/login">here</a> to sign in with an existing account.
-        </span>
       </div>
     </div>
   </div>
