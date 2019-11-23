@@ -18,6 +18,9 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login,
+      meta: {
+        requiresVisitor: true,
+      },
     },
     {
       path: '/register',
