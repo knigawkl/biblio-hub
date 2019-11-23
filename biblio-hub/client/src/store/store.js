@@ -26,7 +26,7 @@ export default new Vuex.Store({
       axios.defaults.headers.common.Authorization += `Bearer ${context.state.token}`;
       if (context.getters.loggedIn) {
         return new Promise((resolve, reject) => {
-          axios.post('/logout')
+          axios.post('http://localhost:5000/logout/')
             .then((response) => {
               localStorage.removeItem('access_token');
               context.commit('destroyToken');

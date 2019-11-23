@@ -23,6 +23,9 @@ export default new Router({
       path: '/register',
       name: 'Register',
       component: Register,
+      meta: {
+        requiresVisitor: true,
+      },
     },
     {
       path: '/logout',
@@ -33,6 +36,9 @@ export default new Router({
       path: '/hub',
       name: 'Hub',
       component: Hub,
+      meta: {
+        requiresAuth: true,
+      },
     },
   ],
 });
