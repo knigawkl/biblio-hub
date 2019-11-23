@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6 mt-5 mx-auto">
-        <form id="form" v-on:submit.prevent="signin">
+        <form id="login_form" v-on:submit.prevent="signin">
           <div class="form-group">
             <label id="login_label" for="login">Login</label>
             <div id="msg"></div>
