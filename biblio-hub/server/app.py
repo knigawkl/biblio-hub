@@ -65,19 +65,19 @@ BOOKS = [
         'id': uuid.uuid4().hex,
         'title': 'On the Road',
         'author': 'Jack Kerouac',
-        'read': True
+        'year': 1998
     },
     {
         'id': uuid.uuid4().hex,
         'title': 'Harry Potter and the Philosopher\'s Stone',
         'author': 'J. K. Rowling',
-        'read': False
+        'year': 2008
     },
     {
         'id': uuid.uuid4().hex,
         'title': 'Green Eggs and Ham',
         'author': 'Dr. Seuss',
-        'read': True
+        'year': 1887
     }
 ]
 
@@ -91,7 +91,7 @@ def hub():
             'id': uuid.uuid4().hex,
             'title': post_data.get('title'),
             'author': post_data.get('author'),
-            'read': post_data.get('read')
+            'year': post_data.get('year')
         })
         response_object['message'] = 'Book added!'
     else:
@@ -117,7 +117,7 @@ def single_book(book_id):
             'id': uuid.uuid4().hex,
             'title': post_data.get('title'),
             'author': post_data.get('author'),
-            'read': post_data.get('read')
+            'year': post_data.get('year')
         })
         response_object['message'] = 'Book updated!'
     if request.method == 'DELETE':
