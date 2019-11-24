@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.css';
+import BootstrapVue from 'bootstrap-vue';
 import axios from 'axios';
 import Vue from 'vue';
 import App from './App.vue';
@@ -7,6 +8,7 @@ import store from './store/store';
 
 Vue.config.devtools = true;
 window.axios = axios;
+Vue.use(BootstrapVue);
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {
