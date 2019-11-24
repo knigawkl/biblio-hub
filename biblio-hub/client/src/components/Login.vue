@@ -2,6 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6 mt-5 mx-auto">
+        <alert :message="message" v-if="showMessage"></alert>
         <form id="login_form" v-on:submit.prevent="signin">
           <div class="form-group">
             <label id="login_label" for="login">Login</label>
@@ -22,6 +23,9 @@
 </template>
 
 <script>
+
+import Alert from './Alert.vue';
+
 export default {
   name: 'signin',
   data() {
@@ -30,7 +34,12 @@ export default {
       password: '',
       serverError: '',
       successMessage: '',
+      message: '',
+      showMessage: false,
     };
+  },
+  components: {
+    alert: Alert,
   },
   methods: {
     signin() {
@@ -43,6 +52,8 @@ export default {
           this.successMessage = response.data;
         })
         .catch((error) => {
+          this.message = 'Invalid data!';
+          this.showMessage = true;
           this.serverError = error.response.data;
           this.password = '';
           this.successMessage = '';

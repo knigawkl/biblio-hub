@@ -2,6 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6 mt-5 mx-auto">
+        <alert :message="message" v-if="showMessage"></alert>
         <form id="reg_form" v-on:submit.prevent="register">
           <div class="form-group">
             <label for="reg_email">Email Address</label>
@@ -31,6 +32,7 @@
 <script type="text/javascript">
 
 import axios from 'axios';
+import Alert from './Alert.vue';
 
 window.onkeyup = () => {
   if (document.getElementById('reg_form') != null) {
@@ -70,7 +72,12 @@ export default {
       reg_email: '',
       reg_login: '',
       reg_password: '',
+      message: '',
+      showMessage: false,
     };
+  },
+  components: {
+    alert: Alert,
   },
   methods: {
     register() {
@@ -83,6 +90,9 @@ export default {
       }).then((resp) => {
         if (resp.data === 'Username available') {
           this.$router.push({ name: 'Login' });
+        } else {
+          this.message = 'Invalid data!';
+          this.showMessage = true;
         }
       });
     },
