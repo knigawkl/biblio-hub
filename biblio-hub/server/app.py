@@ -10,6 +10,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['SECRET_KEY'] = 'customerobsessed'
 db = redis.Redis(host='redis', port=6379, decode_responses=True)
+db.flushdb()
 
 CORS(app)
 
@@ -33,21 +34,28 @@ def index():
     return redirect(url_for('login'))
 
 
-@app.route('/register/', methods=['POST'])
+@app.route('/register/', methods=['POST', 'PUT'])
 def register():
-    login = request.get_json()['login']
-    if login == "lukasz":
+    req = request.get_json()
+    login = req['login']
+    if login and db.hget(login, 'login') == login:
         resp = jsonify('Login unavailable')
+        return resp
     else:
         resp = jsonify('Username available')
+    if request.method == 'PUT':
+        password, email = req['password'], req['email']
+        db.hset(login, 'login', login)
+        db.hset(login, 'password', password)
+        db.hset(login, 'email', email)
     return resp
 
 
 @app.route('/login/', methods=['POST'])
 def login():
-    auth = request.json
-
-    if auth and auth['password'] == 'password':
+    auth = request.get_json()
+    login, password = auth['login'], auth['password']
+    if auth and db.hget(login, 'password') == password:
         token = jwt.encode({'user': auth['login'],
                             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)},
                            app.config['SECRET_KEY'])

@@ -76,7 +76,7 @@ export default {
     register() {
       const path = 'http://localhost:5000/register/';
 
-      axios.post(path, {
+      axios.put(path, {
         email: this.reg_email,
         login: this.reg_login,
         password: this.reg_password,
