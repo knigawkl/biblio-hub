@@ -81,7 +81,7 @@
         <b-form-group>
           <b-form-file
             v-model="addBookForm.file"
-            :state="Boolean(addBookForm.file)"
+            :state=null
             placeholder="Choose a file or drop it here..."
             drop-placeholder="Drop file here..."
           ></b-form-file>
@@ -128,7 +128,7 @@
         <b-form-group>
           <b-form-file
             v-model="editForm.file"
-            :state="Boolean(editForm.file)"
+            :state=null
             placeholder="Choose a file or drop it here..."
             drop-placeholder="Drop file here..."
           ></b-form-file>

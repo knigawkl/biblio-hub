@@ -22,7 +22,7 @@ export default {
   methods: {
     submitFile() {
       const formData = new FormData();
-      formData.append('file', this.file);
+      formData.append('file', this.file);FA
       axios.post('/single-file', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
         .then(() => {
           console.log('SUCCESS!!');
