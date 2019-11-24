@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
+  <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-10"><br>
+      <div class="col"><br>
         <alert :message="message" v-if="showMessage"></alert>
         <button type="button"
                 class="btn btn-secondary btn-sm"
@@ -10,10 +10,10 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th scope="col">Title</th>
-              <th scope="col">Author</th>
-              <th scope="col">Read?</th>
-              <th></th>
+              <th scope="col" style="width: 60%">Title</th>
+              <th scope="col" style="width: 20%">Author</th>
+              <th scope="col" style="width: 10%">Year</th>
+              <th style="width: 10%"></th>
             </tr>
           </thead>
           <tbody>
