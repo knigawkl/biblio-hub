@@ -1,13 +1,15 @@
-import datetime
-import uuid
-import jwt
 from flask import Flask, jsonify, request, redirect, url_for, make_response
 from flask_cors import CORS
 from functools import wraps
+import datetime
+import uuid
+import jwt
+import redis
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['SECRET_KEY'] = 'customerobsessed'
+db = redis.Redis(host='redis', port=6379, decode_responses=True)
 
 CORS(app)
 

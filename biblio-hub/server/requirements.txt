@@ -4,3 +4,4 @@ pip==19.3.1
 Flask==1.1.1
 setuptools==39.0.1
 pyjwt
+redis
