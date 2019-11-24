@@ -10,15 +10,17 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th scope="col" style="width: 60%">Title</th>
-              <th scope="col" style="width: 20%">Author</th>
-              <th scope="col" style="width: 10%">Year</th>
+              <th scope="col" style="width: 50%">Title</th>
+              <th scope="col" style="width: 20%">File</th>
+              <th scope="col" style="width: 15%">Author</th>
+              <th scope="col" style="width: 5%">Year</th>
               <th style="width: 10%"></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(book, index) in books" :key="index">
               <td>{{ book.title }}</td>
+              <td>{{ book.file }}</td>
               <td>{{ book.author }}</td>
               <td>{{ book.year }}</td>
               <td>
@@ -73,9 +75,16 @@
           <b-form-input id="form-year-input"
                           type="text"
                           v-model="addBookForm.year"
-                          required
                           placeholder="Enter year">
           </b-form-input>
+        </b-form-group>
+        <b-form-group>
+          <b-form-file
+            v-model="addBookForm.file"
+            :state="Boolean(addBookForm.file)"
+            placeholder="Choose a file or drop it here..."
+            drop-placeholder="Drop file here..."
+          ></b-form-file>
         </b-form-group>
         <b-button type="submit" variant="primary">Submit</b-button>
         <b-button type="reset" variant="danger">Reset</b-button>
@@ -93,7 +102,6 @@
           <b-form-input id="form-title-edit-input"
                         type="text"
                         v-model="editForm.title"
-                        required
                         placeholder="Enter title">
           </b-form-input>
         </b-form-group>
@@ -117,6 +125,14 @@
                           placeholder="Enter year">
           </b-form-input>
         </b-form-group>
+        <b-form-group>
+          <b-form-file
+            v-model="editForm.file"
+            :state="Boolean(editForm.file)"
+            placeholder="Choose a file or drop it here..."
+            drop-placeholder="Drop file here..."
+          ></b-form-file>
+        </b-form-group>
         <b-button-group>
           <b-button type="submit" variant="primary">Update</b-button>
           <b-button type="reset" variant="danger">Cancel</b-button>
@@ -138,12 +154,14 @@ export default {
         title: '',
         author: '',
         year: '',
+        file: null,
       },
       editForm: {
         id: '',
         title: '',
         author: '',
         year: '',
+        file: null,
       },
       message: '',
       showMessage: false,
@@ -216,10 +234,12 @@ export default {
       this.addBookForm.title = '';
       this.addBookForm.author = '';
       this.addBookForm.year = [];
+      this.addBookForm.file = null;
       this.editForm.id = '';
       this.editForm.title = '';
       this.editForm.author = '';
       this.editForm.year = '';
+      this.editForm.file = null;
     },
     onSubmit(evt) {
       evt.preventDefault();
@@ -227,7 +247,8 @@ export default {
       const payload = {
         title: this.addBookForm.title,
         author: this.addBookForm.author,
-        year: this.addBookForm.year, // property shorthand
+        year: this.addBookForm.year,
+        file: this.addBookForm.file.name,
       };
       this.addBook(payload);
       this.initForm();
@@ -240,6 +261,7 @@ export default {
         title: this.editForm.title,
         author: this.editForm.author,
         year: this.editForm.year,
+        file: this.editForm.file.name,
       };
       this.updateBook(payload, this.editForm.id);
     },
