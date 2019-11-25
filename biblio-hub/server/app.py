@@ -18,11 +18,11 @@ CORS(app)
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = request.args.get('token')
+        token = request.headers.get('Authorization')
         if not token:
             return jsonify({'message': 'Missing token'})
         try:
-            data = jwt.decode(token, app.config['SECRET_KEY'])
+            payload = jwt.decode(token, app.config['SECRET_KEY'])
         except:
             return jsonify({'message': 'Invalid token'})
         return f(*args, **kwargs)
@@ -70,6 +70,7 @@ def logout():
     return make_response('Logged out', 200)
 
 
+# pure no-sql
 BOOKS = [
     {
         'id': uuid.uuid4().hex,
@@ -150,6 +151,7 @@ def save_file(file):
 
 
 @app.route('/file/', methods=['POST', 'PUT'])
+@token_required
 def file():
     if request.method == 'POST':
         file = request.files['file']
@@ -157,7 +159,7 @@ def file():
         return make_response('File uploaded', 200)
     if request.method == 'PUT':
         filename = db.hget('filenames', 'filename')
-        return send_file('files/' + filename, mimetype='application/pdf',
+        return send_file('files/' + filename,
                          as_attachment=True, attachment_filename=filename)
 
 

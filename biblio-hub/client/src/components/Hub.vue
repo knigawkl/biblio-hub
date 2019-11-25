@@ -4,9 +4,13 @@
       <div class="col"><br>
         <alert :message="message" v-if="showMessage"></alert>
 
-        <label>At the moment, this is the only working file-upload up here...
-          <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
-        </label>
+        <b-form-file
+          v-model="file"
+          :state="null"
+          placeholder="Choose a file or drop it here..."
+          drop-placeholder="Drop file here..."
+        ></b-form-file>
+        <div class="mt-3">Selected file: {{ file ? file.name : '' }}</div>
         <button class="btn btn-secondary btn-sm" v-on:click="submitFile()">Submit</button>
         <button class="btn btn-secondary btn-sm" v-on:click="downloadFile()">Download</button>
 
@@ -183,7 +187,9 @@ export default {
     submitFile() {
       const formData = new FormData();
       formData.append('file', this.file);
-      axios.post('http://localhost:5000/file/', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+      const token = localStorage.getItem('access_token');
+      axios.post('http://localhost:5000/file/', formData,
+        { headers: { 'Content-Type': 'multipart/form-data', Authorization: `${token}` } })
         .then(() => {
           this.message = 'File added!';
           this.showMessage = true;
@@ -197,16 +203,16 @@ export default {
       axios.put('http://localhost:5000/file/')
         .then(() => {
           /*
-          const blob = new Blob([response], { type: 'application/pdf' });
+          const blob = new Blob([response], { type: 'image/jpeg' });
           const url = window.URL.createObjectURL(blob);
           const link = document.createElement('a');
           document.body.appendChild(link);
           link.href = url;
-          link.download = 'report.pdf';
           link.click();
-           */
           this.message = 'Download successful';
           this.showMessage = true;
+
+           */
         })
         .catch(() => {
           this.message = 'Download failed';
