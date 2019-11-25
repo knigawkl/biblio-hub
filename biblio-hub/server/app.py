@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, redirect, url_for, make_response
+from flask import Flask, jsonify, request, redirect, url_for, make_response, send_file, send_from_directory
 from flask_cors import CORS
 from functools import wraps
 import datetime
@@ -146,14 +146,19 @@ def save_file(file):
     file.save(path)
     db.hset(file.filename, "filename", file.filename)
     db.hset(file.filename, "path", path)
-    db.hset("filenames", file.filename, file.filename)
+    db.hset("filenames", 'filename', file.filename)
 
 
-@app.route('/file/', methods=['POST'])
+@app.route('/file/', methods=['POST', 'PUT'])
 def file():
-    file = request.files['file']
-    save_file(file)
-    return make_response('File uploaded', 200)
+    if request.method == 'POST':
+        file = request.files['file']
+        save_file(file)
+        return make_response('File uploaded', 200)
+    if request.method == 'PUT':
+        filename = db.hget('filenames', 'filename')
+        return send_file('files/' + filename, mimetype='application/pdf',
+                         as_attachment=True, attachment_filename=filename)
 
 
 if __name__ == '__main__':

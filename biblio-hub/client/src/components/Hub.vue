@@ -7,7 +7,8 @@
         <label>At the moment, this is the only working file-upload up here...
           <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
         </label>
-        <button v-on:click="submitFile()">Submit</button>
+        <button class="btn btn-secondary btn-sm" v-on:click="submitFile()">Submit</button>
+        <button class="btn btn-secondary btn-sm" v-on:click="downloadFile()">Download</button>
 
         <br><br>
         <button type="button"
@@ -189,6 +190,26 @@ export default {
         })
         .catch(() => {
           this.message = 'File upload error!';
+          this.showMessage = true;
+        });
+    },
+    downloadFile() {
+      axios.put('http://localhost:5000/file/')
+        .then(() => {
+          /*
+          const blob = new Blob([response], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          document.body.appendChild(link);
+          link.href = url;
+          link.download = 'report.pdf';
+          link.click();
+           */
+          this.message = 'Download successful';
+          this.showMessage = true;
+        })
+        .catch(() => {
+          this.message = 'Download failed';
           this.showMessage = true;
         });
     },
