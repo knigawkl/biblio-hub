@@ -3,6 +3,13 @@
     <div class="row">
       <div class="col"><br>
         <alert :message="message" v-if="showMessage"></alert>
+
+        <label>At the moment, this is the only working file-upload up here...
+          <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
+        </label>
+        <button v-on:click="submitFile()">Submit</button>
+
+        <br><br>
         <button type="button"
                 class="btn btn-secondary btn-sm"
                 v-b-modal.book-modal>Add Book</button>
@@ -150,6 +157,7 @@ export default {
   data() {
     return {
       books: [],
+      file: '',
       addBookForm: {
         title: '',
         author: '',
@@ -171,6 +179,23 @@ export default {
     alert: Alert,
   },
   methods: {
+    submitFile() {
+      const formData = new FormData();
+      formData.append('file', this.file);
+      axios.post('http://localhost:5000/file/', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+        .then(() => {
+          this.message = 'File added!';
+          this.showMessage = true;
+        })
+        .catch(() => {
+          this.message = 'File upload error!';
+          this.showMessage = true;
+        });
+    },
+    handleFileUpload() {
+      // eslint-disable-next-line
+      this.file = this.$refs.file.files[0];
+    },
     getBooks() {
       const path = 'http://localhost:5000/hub/';
       axios.get(path)

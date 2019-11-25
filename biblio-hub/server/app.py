@@ -141,5 +141,20 @@ def single_book(book_id):
     return jsonify(response_object)
 
 
+def save_file(file):
+    path = "files/" + file.filename
+    file.save(path)
+    db.hset(file.filename, "filename", file.filename)
+    db.hset(file.filename, "path", path)
+    db.hset("filenames", file.filename, file.filename)
+
+
+@app.route('/file/', methods=['POST'])
+def file():
+    file = request.files['file']
+    save_file(file)
+    return make_response('File uploaded', 200)
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
