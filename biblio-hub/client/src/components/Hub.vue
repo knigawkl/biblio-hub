@@ -200,19 +200,16 @@ export default {
         });
     },
     downloadFile() {
-      axios.put('http://localhost:5000/file/')
-        .then(() => {
-          /*
-          const blob = new Blob([response], { type: 'image/jpeg' });
-          const url = window.URL.createObjectURL(blob);
+      const token = localStorage.getItem('access_token');
+      axios.get('http://localhost:5000/file/',
+        { headers: { 'Content-Type': 'application/pdf', Authorization: `${token}` } })
+        .then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
           const link = document.createElement('a');
-          document.body.appendChild(link);
           link.href = url;
+          link.setAttribute('download', 'file.pdf');
+          document.body.appendChild(link);
           link.click();
-          this.message = 'Download successful';
-          this.showMessage = true;
-
-           */
         })
         .catch(() => {
           this.message = 'Download failed';

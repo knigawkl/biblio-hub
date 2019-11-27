@@ -23,6 +23,7 @@ def token_required(f):
             return jsonify({'message': 'Missing token'})
         try:
             payload = jwt.decode(token, app.config['SECRET_KEY'])
+            print(payload)
         except:
             return jsonify({'message': 'Invalid token'})
         return f(*args, **kwargs)
@@ -150,16 +151,16 @@ def save_file(file):
     db.hset("filenames", 'filename', file.filename)
 
 
-@app.route('/file/', methods=['POST', 'PUT'])
+@app.route('/file/', methods=['POST', 'GET'])
 @token_required
 def file():
     if request.method == 'POST':
         file = request.files['file']
         save_file(file)
         return make_response('File uploaded', 200)
-    if request.method == 'PUT':
+    if request.method == 'GET':
         filename = db.hget('filenames', 'filename')
-        return send_file('files/' + filename,
+        return send_file('files/' + filename, mimetype="Content-Type: application/pdf",
                          as_attachment=True, attachment_filename=filename)
 
 
