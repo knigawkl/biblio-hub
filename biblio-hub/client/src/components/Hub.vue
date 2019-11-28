@@ -156,6 +156,7 @@
 
 <script>
 import axios from 'axios';
+import { saveAs } from 'file-saver';
 import Alert from './Alert.vue';
 
 export default {
@@ -201,15 +202,15 @@ export default {
     },
     downloadFile() {
       const token = localStorage.getItem('access_token');
-      axios.get('http://localhost:5000/file/',
-        { headers: { 'Content-Type': 'application/pdf', Authorization: `${token}` } })
+      axios.get('http://localhost:5000/file/', {
+        responseType: 'arraybuffer',
+        headers: { 'Content-Type': 'application/pdf', Authorization: `${token}` },
+      })
         .then((response) => {
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', 'file.pdf');
-          document.body.appendChild(link);
-          link.click();
+          const blob = new Blob([response.data], {
+            type: 'application/pdf',
+          });
+          saveAs(blob, this.file.name);
         })
         .catch(() => {
           this.message = 'Download failed';
