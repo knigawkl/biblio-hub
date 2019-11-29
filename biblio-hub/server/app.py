@@ -23,7 +23,8 @@ def token_required(f):
             return jsonify({'message': 'Missing token'})
         try:
             payload = jwt.decode(token, app.config['SECRET_KEY'])
-            print(payload)
+            if payload['user'] != db.hget(payload['user'], 'login'):
+                raise Exception('Login {} could not be found in the db'.format(payload['user']))
         except:
             return jsonify({'message': 'Invalid token'})
         return f(*args, **kwargs)
