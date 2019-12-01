@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, redirect, url_for, make_response, send_file, send_from_directory
 from flask_cors import CORS
 from functools import wraps
+from flask_swagger_ui import get_swaggerui_blueprint
 import datetime
 import uuid
 import jwt
@@ -29,6 +30,23 @@ def token_required(f):
             return jsonify({'message': 'Invalid token'})
         return f(*args, **kwargs)
     return decorated
+
+
+@app.route('/static/<path:path>')
+def send_static(path):
+    return send_from_directory('static', path)
+
+
+SWAGGER_URL = '/swagger'
+API_URL = '/static/swagg.yaml'
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': 'BIBLIO-HUB'
+    }
+)
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 
 @app.route('/')
