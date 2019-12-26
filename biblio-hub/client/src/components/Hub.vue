@@ -10,9 +10,10 @@
           placeholder="Choose a file or drop it here..."
           drop-placeholder="Drop file here..."
         ></b-form-file>
-        <div class="mt-3">Selected file: {{ file ? file.name : '' }}</div>
+        <div class="mt-3">
+          <b-link @click="downloadFile">{{ file ? file.name : '' }}</b-link>
+        </div>
         <button class="btn btn-secondary btn-sm" v-on:click="submitFile()">Submit</button>
-        <button class="btn btn-secondary btn-sm" v-on:click="downloadFile()">Download</button>
 
         <br><br>
         <button type="button"
