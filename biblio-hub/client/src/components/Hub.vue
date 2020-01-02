@@ -5,6 +5,7 @@
         <alert :message="message" v-if="showMessage"></alert>
 
         <b-form-file
+          v-on:input="submitFile()"
           v-model="file"
           :state="null"
           placeholder="Choose a file or drop it here..."
@@ -13,7 +14,6 @@
         <div class="mt-3">
           <b-link @click="downloadFile">{{ file ? file.name : '' }}</b-link>
         </div>
-        <button class="btn btn-secondary btn-sm" v-on:click="submitFile()">Submit</button>
 
         <br><br>
         <button type="button"
