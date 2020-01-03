@@ -12,7 +12,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['SECRET_KEY'] = 'customerobsessed'
 db = redis.Redis(host='redis', port=6379, decode_responses=True)
-db.flushdb()  # uncomment in order to flush the database
+# db.flushdb()  # uncomment in order to flush the database
 
 CORS(app)
 
@@ -30,6 +30,7 @@ def token_required(f):
         except:
             return jsonify({'message': 'Invalid token'})
         return f(*args, **kwargs)
+
     return decorated
 
 
@@ -97,7 +98,7 @@ def hub():
     if request.method == 'POST':
         post_data = request.get_json()
 
-        id = post_data.get('id')
+        id = str(post_data.get('id'))
         db.hset(id, 'id', id)
         db.hset(id, 'title', post_data.get('title'))
         db.hset(id, 'author', post_data.get('author'))
@@ -161,22 +162,18 @@ def save_file(file, id):
             if exc.errno != errno.EEXIST:
                 raise
     file.save(path)
-    # todo
-    db.hset(file.filename, "filename", file.filename)
-    db.hset(file.filename, "path", path)
-    db.hset("filenames", 'filename', file.filename)
+    db.lpush(f'_{id}', file.filename)
 
 
-@app.route('/file/<book_id>', methods=['POST', 'GET'])
-@token_required
-def file(book_id):
+@app.route('/file/<book_id>/<filename>', methods=['POST', 'GET'])
+# @token_required
+def file(book_id, filename):
     if request.method == 'POST':
         file = request.files['file']
         save_file(file, book_id)
         return make_response('File uploaded', 200)
     if request.method == 'GET':
-        filename = db.hget('filenames', 'filename')
-        return send_file(f'files/{book_id}' + filename, mimetype="Content-Type: application/pdf",
+        return send_file(f'files/{book_id}/{filename}', mimetype="Content-Type: application/pdf",
                          as_attachment=True, attachment_filename=filename)
 
 

@@ -4,7 +4,6 @@
       <div class="col"><br>
         <alert :message="message" v-if="showMessage"/>
 
-        <br><br>
         <button type="button"
                 class="btn btn-secondary btn-sm"
                 v-b-modal.book-modal>Add Book</button>
@@ -22,7 +21,9 @@
           <tbody>
             <tr v-for="(book, index) in books" :key="index">
               <td>{{ book.title }}</td>
-              <td>{{ book.file }}</td>
+              <td>
+                <b-link @click="downloadFile(book.id, book.file)">{{book.file}}</b-link>
+              </td>
               <td>{{ book.author }}</td>
               <td>{{ book.year }}</td>
               <td>
@@ -134,9 +135,6 @@
             placeholder="Choose a file or drop it here..."
             drop-placeholder="Drop file here..."
           />
-          <div class="mt-3">
-            <b-link @click="downloadFile()">{{ file ? file.name : '' }}</b-link>
-          </div>
         </b-form-group>
         <b-button-group>
           <b-button type="submit" variant="primary">Update</b-button>
@@ -182,7 +180,7 @@ export default {
       const formData = new FormData();
       formData.append('file', file);
       const token = localStorage.getItem('access_token');
-      axios.post(`http://localhost:5000/file/${bookId}`, formData,
+      axios.post(`http://localhost:5000/file/${bookId}/new`, formData,
         { headers: { 'Content-Type': 'multipart/form-data', Authorization: `${token}` } })
         .then(() => {
           this.message = 'File added!';
@@ -193,9 +191,9 @@ export default {
           this.showMessage = true;
         });
     },
-    downloadFile() {
+    downloadFile(bookId, filename) {
       const token = localStorage.getItem('access_token');
-      axios.get('http://localhost:5000/file/', {
+      axios.get(`http://localhost:5000/file/${bookId}/${filename}`, {
         responseType: 'arraybuffer',
         headers: { 'Content-Type': 'application/pdf', Authorization: `${token}` },
       })
@@ -203,7 +201,7 @@ export default {
           const blob = new Blob([response.data], {
             type: 'application/pdf',
           });
-          saveAs(blob, this.file.name);
+          saveAs(blob, filename);
         })
         .catch(() => {
           this.message = 'Download failed';
