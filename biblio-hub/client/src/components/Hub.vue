@@ -12,7 +12,7 @@
           <thead>
             <tr>
               <th scope="col" style="width: 50%">Title</th>
-              <th scope="col" style="width: 20%">File</th>
+              <th scope="col" style="width: 20%">PDF File</th>
               <th scope="col" style="width: 15%">Author</th>
               <th scope="col" style="width: 5%">Year</th>
               <th style="width: 10%"/>
@@ -83,6 +83,7 @@
         </b-form-group>
         <b-form-group>
           <b-form-file
+            accept=".pdf"
             v-model="addBookForm.file"
             :state=null
             placeholder="Choose a file or drop it here..."
@@ -122,14 +123,17 @@
                       label="Year:"
                       label-for="form-year-input">
           <b-form-input id="form-year-input"
-                          type="text"
-                          v-model="editForm.year"
-                          required
-                          placeholder="Enter year">
-          </b-form-input>
+                        type="text"
+                        v-model="editForm.year"
+                        required
+                        placeholder="Enter year"/>
         </b-form-group>
-        <b-form-group>
+        <b-form-group id="form-file-group"
+                      label="PDF File:"
+                      label-for="form-file-input">
           <b-form-file
+            accept=".pdf"
+            id="form-file-input"
             v-model="editForm.file"
             :state=null
             placeholder="Choose a file or drop it here..."
@@ -236,13 +240,14 @@ export default {
     onSubmitUpdate(evt) {
       evt.preventDefault();
       this.$refs.editBookModal.hide();
-      this.$refs.editBookModal.hide();
       const payload = {
+        id: this.editForm.id,
         title: this.editForm.title,
         author: this.editForm.author,
         year: this.editForm.year,
         file: this.editForm.file.name,
       };
+      this.submitFile(this.editForm.file, payload.id);
       this.updateBook(payload, this.editForm.id);
     },
     onResetUpdate(evt) {

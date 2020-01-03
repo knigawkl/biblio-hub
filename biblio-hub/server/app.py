@@ -116,6 +116,8 @@ def get_books():
     books = []
     db_resp = db.smembers('books')
     for member in db_resp:
+        print("fhkeghfuiowqdhgfjihqwdjkfjkwhqeolfhj9qlfhj")
+        print(member, db.hget(member, 'title'), db.hget(member, 'author'), db.hget(member, 'year'), db.hget(member, 'file'))
         book_dict = {'id': member, 'title': db.hget(member, 'title'), 'author': db.hget(member, 'author'),
                      'year': db.hget(member, 'year'), 'file': db.hget(member, 'file')}
         books.append(book_dict)
@@ -126,7 +128,7 @@ def remove_book(book_id):
     db_resp = db.smembers('books')
     for member in db_resp:
         if member == book_id:
-            db.hdel(member, 'title', 'author', 'year', 'files')
+            db.hdel(member, 'id', 'title', 'author', 'year', 'file')
             db.srem('books', member)
             return True
     return False
@@ -139,11 +141,11 @@ def single_book(book_id):
         post_data = request.get_json()
         id = book_id
         remove_book(id)
-
+        db.hset(id, 'id', id)
         db.hset(id, 'title', post_data.get('title'))
         db.hset(id, 'author', post_data.get('author'))
         db.hset(id, 'year', post_data.get('year'))
-        db.hset(id, 'files', post_data.get('file'))
+        db.hset(id, 'file', post_data.get('file'))
         db.sadd('books', id)
 
         response_object['message'] = 'Book updated!'
