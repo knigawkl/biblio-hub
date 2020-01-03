@@ -2,18 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col"><br>
-        <alert :message="message" v-if="showMessage"></alert>
-
-        <b-form-file
-          v-on:input="submitFile()"
-          v-model="file"
-          :state="null"
-          placeholder="Choose a file or drop it here..."
-          drop-placeholder="Drop file here..."
-        ></b-form-file>
-        <div class="mt-3">
-          <b-link @click="downloadFile">{{ file ? file.name : '' }}</b-link>
-        </div>
+        <alert :message="message" v-if="showMessage"/>
 
         <br><br>
         <button type="button"
@@ -93,11 +82,15 @@
         </b-form-group>
         <b-form-group>
           <b-form-file
+            v-on:input="submitFile()"
             v-model="addBookForm.file"
             :state=null
             placeholder="Choose a file or drop it here..."
             drop-placeholder="Drop file here..."
-          ></b-form-file>
+          />
+          <div class="mt-3">
+            <b-link @click="downloadFile">{{ file ? file.name : '' }}</b-link>
+          </div>
         </b-form-group>
         <b-button type="submit" variant="primary">Submit</b-button>
         <b-button type="reset" variant="danger">Reset</b-button>
@@ -140,11 +133,15 @@
         </b-form-group>
         <b-form-group>
           <b-form-file
+            v-on:input="submitFile()"
             v-model="editForm.file"
             :state=null
             placeholder="Choose a file or drop it here..."
             drop-placeholder="Drop file here..."
-          ></b-form-file>
+          />
+          <div class="mt-3">
+            <b-link @click="downloadFile">{{ file ? file.name : '' }}</b-link>
+          </div>
         </b-form-group>
         <b-button-group>
           <b-button type="submit" variant="primary">Update</b-button>

@@ -148,11 +148,6 @@ def single_book(book_id):
     return jsonify(response_object)
 
 
-
-
-# wip2
-
-
 def save_file(file):
     path = "files/" + file.filename
     file.save(path)
