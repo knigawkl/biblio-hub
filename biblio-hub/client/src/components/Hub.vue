@@ -16,7 +16,7 @@
               <th scope="col" style="width: 20%">File</th>
               <th scope="col" style="width: 15%">Author</th>
               <th scope="col" style="width: 5%">Year</th>
-              <th style="width: 10%"></th>
+              <th style="width: 10%"/>
             </tr>
           </thead>
           <tbody>
@@ -50,7 +50,7 @@
              id="book-modal"
              title="Add a new book"
              hide-footer>
-      <b-form @submit="onSubmit" @reset="onReset" class="w-100">
+      <b-form @submit="onSubmitAdd" @reset="onReset" class="w-100">
         <b-form-group id="form-title-group"
                     label="Title:"
                     label-for="form-title-input">
@@ -82,15 +82,11 @@
         </b-form-group>
         <b-form-group>
           <b-form-file
-            v-on:input="submitFile()"
             v-model="addBookForm.file"
             :state=null
             placeholder="Choose a file or drop it here..."
             drop-placeholder="Drop file here..."
           />
-          <div class="mt-3">
-            <b-link @click="downloadFile">{{ file ? file.name : '' }}</b-link>
-          </div>
         </b-form-group>
         <b-button type="submit" variant="primary">Submit</b-button>
         <b-button type="reset" variant="danger">Reset</b-button>
@@ -133,14 +129,13 @@
         </b-form-group>
         <b-form-group>
           <b-form-file
-            v-on:input="submitFile()"
             v-model="editForm.file"
             :state=null
             placeholder="Choose a file or drop it here..."
             drop-placeholder="Drop file here..."
           />
           <div class="mt-3">
-            <b-link @click="downloadFile">{{ file ? file.name : '' }}</b-link>
+            <b-link @click="downloadFile()">{{ file ? file.name : '' }}</b-link>
           </div>
         </b-form-group>
         <b-button-group>
@@ -161,8 +156,8 @@ export default {
   data() {
     return {
       books: [],
-      file: '',
       addBookForm: {
+        id: '',
         title: '',
         author: '',
         year: '',
@@ -183,11 +178,11 @@ export default {
     alert: Alert,
   },
   methods: {
-    submitFile() {
+    submitFile(file, bookId) {
       const formData = new FormData();
-      formData.append('file', this.file);
+      formData.append('file', file);
       const token = localStorage.getItem('access_token');
-      axios.post('http://localhost:5000/file/', formData,
+      axios.post(`http://localhost:5000/file/${bookId}`, formData,
         { headers: { 'Content-Type': 'multipart/form-data', Authorization: `${token}` } })
         .then(() => {
           this.message = 'File added!';
@@ -215,10 +210,6 @@ export default {
           this.showMessage = true;
         });
     },
-    handleFileUpload() {
-      // eslint-disable-next-line
-      this.file = this.$refs.file.files[0];
-    },
     getBooks() {
       const path = 'http://localhost:5000/hub/';
       axios.get(path)
@@ -228,20 +219,6 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
-        });
-    },
-    addBook(payload) {
-      const path = 'http://localhost:5000/hub/';
-      axios.post(path, payload)
-        .then(() => {
-          this.getBooks();
-          this.message = 'Book added!';
-          this.showMessage = true;
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
-          this.getBooks();
         });
     },
     updateBook(payload, bookID) {
@@ -257,6 +234,24 @@ export default {
           console.error(error);
           this.getBooks();
         });
+    },
+    onSubmitUpdate(evt) {
+      evt.preventDefault();
+      this.$refs.editBookModal.hide();
+      this.$refs.editBookModal.hide();
+      const payload = {
+        title: this.editForm.title,
+        author: this.editForm.author,
+        year: this.editForm.year,
+        file: this.editForm.file.name,
+      };
+      this.updateBook(payload, this.editForm.id);
+    },
+    onResetUpdate(evt) {
+      evt.preventDefault();
+      this.$refs.editBookModal.hide();
+      this.initForm();
+      this.getBooks();
     },
     editBook(book) {
       this.editForm = book;
@@ -281,43 +276,41 @@ export default {
     initForm() {
       this.addBookForm.title = '';
       this.addBookForm.author = '';
-      this.addBookForm.year = [];
-      this.addBookForm.file = null;
+      this.addBookForm.year = '';
+      this.addBookForm.file = '';
       this.editForm.id = '';
       this.editForm.title = '';
       this.editForm.author = '';
       this.editForm.year = '';
-      this.editForm.file = null;
+      this.editForm.file = '';
     },
-    onSubmit(evt) {
+    addBook(payload) {
+      const path = 'http://localhost:5000/hub/';
+      axios.post(path, payload)
+        .then(() => {
+          this.getBooks();
+          this.message = 'Book added!';
+          this.showMessage = true;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          this.getBooks();
+        });
+    },
+    onSubmitAdd(evt) {
       evt.preventDefault();
       this.$refs.addBookModal.hide();
       const payload = {
+        id: Math.random().toString(36).substring(2, 15),
         title: this.addBookForm.title,
         author: this.addBookForm.author,
         year: this.addBookForm.year,
         file: this.addBookForm.file.name,
       };
+      this.submitFile(this.addBookForm.file, payload.id);
       this.addBook(payload);
       this.initForm();
-    },
-    onSubmitUpdate(evt) {
-      evt.preventDefault();
-      this.$refs.editBookModal.hide();
-      this.$refs.editBookModal.hide();
-      const payload = {
-        title: this.editForm.title,
-        author: this.editForm.author,
-        year: this.editForm.year,
-        file: this.editForm.file.name,
-      };
-      this.updateBook(payload, this.editForm.id);
-    },
-    onResetUpdate(evt) {
-      evt.preventDefault();
-      this.$refs.editBookModal.hide();
-      this.initForm();
-      this.getBooks();
     },
     onReset(evt) {
       evt.preventDefault();

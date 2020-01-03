@@ -1,17 +1,18 @@
+import datetime
+import jwt
+import redis
+import os
+import errno
 from flask import Flask, jsonify, request, redirect, url_for, make_response, send_file, send_from_directory
 from flask_cors import CORS
 from functools import wraps
 from flask_swagger_ui import get_swaggerui_blueprint
-import datetime
-import uuid
-import jwt
-import redis
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['SECRET_KEY'] = 'customerobsessed'
 db = redis.Redis(host='redis', port=6379, decode_responses=True)
-# db.flushdb() # uncomment in order to flush the database
+db.flushdb()  # uncomment in order to flush the database
 
 CORS(app)
 
@@ -24,8 +25,8 @@ def token_required(f):
             return jsonify({'message': 'Missing token'})
         try:
             payload = jwt.decode(token, app.config['SECRET_KEY'])
-            if payload['user'] != db.hget(payload['user'], 'login'):
-                raise Exception('Login {} could not be found in the db'.format(payload['user']))
+            # if payload['user'] != db.hget(payload['user'], 'login'):
+            #     raise Exception('Login {} could not be found in the db'.format(payload['user']))
         except:
             return jsonify({'message': 'Invalid token'})
         return f(*args, **kwargs)
@@ -95,11 +96,13 @@ def hub():
     response_object = {'status': 'success'}
     if request.method == 'POST':
         post_data = request.get_json()
-        id = uuid.uuid4().hex
+
+        db.hset(id, 'id', post_data.get('id'))
         db.hset(id, 'title', post_data.get('title'))
         db.hset(id, 'author', post_data.get('author'))
         db.hset(id, 'year', post_data.get('year'))
-        db.hset(id, 'files', post_data.get('file'))
+        db.hset(id, 'file', post_data.get('file'))
+
         db.sadd('books', id)
         response_object['message'] = 'Book added!'
     else:
@@ -112,7 +115,7 @@ def get_books():
     db_resp = db.smembers('books')
     for member in db_resp:
         book_dict = {'id': member, 'title': db.hget(member, 'title'), 'author': db.hget(member, 'author'),
-                     'year': db.hget(member, 'year'), 'files': db.hget(member, 'files')}
+                     'year': db.hget(member, 'year'), 'files': db.hget(member, 'file')}
         books.append(book_dict)
     return books
 
@@ -132,8 +135,8 @@ def single_book(book_id):
     response_object = {'status': 'success'}
     if request.method == 'PUT':
         post_data = request.get_json()
-        remove_book(book_id)
         id = book_id
+        remove_book(id)
 
         db.hset(id, 'title', post_data.get('title'))
         db.hset(id, 'author', post_data.get('author'))
@@ -148,24 +151,31 @@ def single_book(book_id):
     return jsonify(response_object)
 
 
-def save_file(file):
-    path = "files/" + file.filename
+def save_file(file, id):
+    path = f"files/{id}/{file.filename}"
+    if not os.path.exists(os.path.dirname(path)):
+        try:
+            os.makedirs(os.path.dirname(path))
+        except OSError as exc:  # Guard against race condition
+            if exc.errno != errno.EEXIST:
+                raise
     file.save(path)
+    # todo
     db.hset(file.filename, "filename", file.filename)
     db.hset(file.filename, "path", path)
     db.hset("filenames", 'filename', file.filename)
 
 
-@app.route('/file/', methods=['POST', 'GET'])
+@app.route('/file/<book_id>', methods=['POST', 'GET'])
 @token_required
-def file():
+def file(book_id):
     if request.method == 'POST':
         file = request.files['file']
-        save_file(file)
+        save_file(file, book_id)
         return make_response('File uploaded', 200)
     if request.method == 'GET':
         filename = db.hget('filenames', 'filename')
-        return send_file('files/' + filename, mimetype="Content-Type: application/pdf",
+        return send_file(f'files/{book_id}' + filename, mimetype="Content-Type: application/pdf",
                          as_attachment=True, attachment_filename=filename)
 
 
