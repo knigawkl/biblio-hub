@@ -116,7 +116,7 @@ def get_books():
     db_resp = db.smembers('books')
     for member in db_resp:
         book_dict = {'id': member, 'title': db.hget(member, 'title'), 'author': db.hget(member, 'author'),
-                     'year': db.hget(member, 'year'), 'files': db.hget(member, 'file')}
+                     'year': db.hget(member, 'year'), 'file': db.hget(member, 'file')}
         books.append(book_dict)
     return books
 
