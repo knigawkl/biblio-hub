@@ -22,12 +22,14 @@
             <tr v-for="(book, index) in books" :key="index">
               <td>{{ book.title }}</td>
               <td>
-                <b-link @click="downloadFile(book.id, book.file)">{{book.file}}</b-link>
-                <br>
-                <button type="button"
+                <div v-for="(file, index) in book.file" :key="index">
+                  <b-link @click="downloadFile(book.id, book.file)">{{file}}</b-link>
+                  <button type="button"
                           class="btn btn-danger btn-sm">
-                    Remove
+                    X
                   </button>
+                  <br>
+                </div>
               </td>
               <td>{{ book.author }}</td>
               <td>{{ book.year }}</td>
@@ -102,9 +104,9 @@
 
     <b-modal ref="editBookModal"
              id="book-update-modal"
-             title="Update"
+             title="Add PDF file"
              hide-footer>
-      <b-form @submit="onSubmitUpdate" @reset="onResetUpdate" class="w-100">
+      <b-form @submit="onSubmitAddFile" @reset="onResetAddFile" class="w-100">
         <b-form-group id="form-file-group"
                       label="PDF File:"
                       label-for="form-file-input">
@@ -196,12 +198,12 @@ export default {
           console.error(error);
         });
     },
-    updateBook(payload, bookID) {
+    addFile(payload, bookID) {
       const path = `http://localhost:5000/hub/${bookID}`;
       axios.put(path, payload)
         .then(() => {
           this.getBooks();
-          this.message = 'Book updated!';
+          this.message = 'File added!';
           this.showMessage = true;
         })
         .catch((error) => {
@@ -210,7 +212,7 @@ export default {
           this.getBooks();
         });
     },
-    onSubmitUpdate(evt) {
+    onSubmitAddFile(evt) {
       evt.preventDefault();
       this.$refs.editBookModal.hide();
       const payload = {
@@ -218,9 +220,9 @@ export default {
         file: this.updateForm.file.name,
       };
       this.submitFile(this.updateForm.file, payload.id);
-      this.updateBook(payload, this.updateForm.id);
+      this.addFile(payload, this.updateForm.id);
     },
-    onResetUpdate(evt) {
+    onResetAddFile(evt) {
       evt.preventDefault();
       this.$refs.editBookModal.hide();
       this.initForm();
@@ -279,7 +281,6 @@ export default {
         title: this.addBookForm.title,
         author: this.addBookForm.author,
         year: this.addBookForm.year,
-        file: this.addBookForm.file.name,
       };
       this.submitFile(this.addBookForm.file, payload.id);
       this.addBook(payload);

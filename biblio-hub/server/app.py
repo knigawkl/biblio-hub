@@ -12,7 +12,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['SECRET_KEY'] = 'customerobsessed'
 db = redis.Redis(host='redis', port=6379, decode_responses=True)
-# db.flushdb()  # uncomment in order to flush the database
+db.flushdb()  # uncomment in order to flush the database
 
 CORS(app)
 
@@ -25,8 +25,8 @@ def token_required(f):
             return jsonify({'message': 'Missing token'})
         try:
             payload = jwt.decode(token, app.config['SECRET_KEY'])
-            if payload['user'] != db.hget(payload['user'], 'login'):
-                raise Exception('Login {} could not be found in the db'.format(payload['user']))
+            #if payload['user'] != db.hget(payload['user'], 'login'):
+            #    raise Exception('Login {} could not be found in the db'.format(payload['user']))
         except:
             return jsonify({'message': 'Invalid token'})
         return f(*args, **kwargs)
@@ -103,7 +103,6 @@ def hub():
         db.hset(id, 'title', post_data.get('title'))
         db.hset(id, 'author', post_data.get('author'))
         db.hset(id, 'year', post_data.get('year'))
-        db.hset(id, 'file', post_data.get('file'))
 
         db.sadd('books', id)
         response_object['message'] = 'Book added!'
@@ -116,8 +115,9 @@ def get_books():
     books = []
     db_resp = db.smembers('books')
     for member in db_resp:
+        files = db.lrange(f'_{member}', 0, -1)
         book_dict = {'id': member, 'title': db.hget(member, 'title'), 'author': db.hget(member, 'author'),
-                     'year': db.hget(member, 'year'), 'file': db.hget(member, 'file')}
+                     'year': db.hget(member, 'year'), 'file': files}
         books.append(book_dict)
     return books
 
@@ -138,12 +138,8 @@ def single_book(book_id):
     if request.method == 'PUT':
         post_data = request.get_json()
         id = book_id
-        remove_book(id)
-        db.hset(id, 'id', id)
-        db.hset(id, 'file', post_data.get('file'))
-        db.sadd('books', id)
 
-        response_object['message'] = 'Book updated!'
+        response_object['message'] = 'File added!'
     if request.method == 'DELETE':
         remove_book(book_id)
         response_object['message'] = 'Book removed!'
