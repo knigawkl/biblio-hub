@@ -65,5 +65,37 @@ describe('Add a new book', function() {
     cy.contains('Add Book').click();
   });
 
-  
+  it('enter title', function () {
+    cy.get('#form-title-input')
+      .type('Sapiens, A Brief History of Humankind');
+  });
+
+  it('enter author', function () {
+    cy.get('#form-author-input')
+      .type('Yuval Noah Harari');
+  });
+
+  it('enter year', function () {
+    cy.get('#form-year-input')
+      .type(2011);
+  });
+
+  it('add file', function () {
+    /*
+    cy.fixture('pdf/start_projektu.pdf').as('file')
+      .get('input[type=file]').then(function(el) {
+        return Cypress.Blob.base64StringToBlob(this.file, 'application/pdf')
+          .then(blob => {
+            el[0].files[0] = blob;
+            el[0].dispatchEvent(new Event('change', {bubbles: true}));
+          })
+      })
+
+     */
+    cy.uploadFile('pdf/start_projektu.pdf', 'input[type=file]', 'application/pdf');
+  });
+
+  it('submit the new book', function () {
+    cy.contains('Submit').click();
+  });
 });

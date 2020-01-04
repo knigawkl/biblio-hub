@@ -159,7 +159,7 @@ def save_file(file, id):
 
 
 @app.route('/file/<book_id>/<filename>', methods=['POST', 'GET', 'DELETE'])
-@token_required
+# @token_required
 def file(book_id, filename):
     if request.method == 'POST':
         file = request.files['file']
