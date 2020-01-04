@@ -158,13 +158,16 @@ def save_file(file, id):
     db.lpush(f'_{id}', file.filename)
 
 
-@app.route('/file/<book_id>/<filename>', methods=['POST', 'GET'])
+@app.route('/file/<book_id>/<filename>', methods=['POST', 'GET', 'DELETE'])
 @token_required
 def file(book_id, filename):
     if request.method == 'POST':
         file = request.files['file']
         save_file(file, book_id)
         return make_response('File uploaded', 200)
+    if request.method == 'DELETE':
+        db.lrem(f'_{book_id}', 1, filename)
+        return make_response('File deleted', 200)
     if request.method == 'GET':
         return send_file(f'files/{book_id}/{filename}', mimetype="Content-Type: application/pdf",
                          as_attachment=True, attachment_filename=filename)

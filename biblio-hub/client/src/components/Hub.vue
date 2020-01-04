@@ -24,11 +24,9 @@
               <td>
                 <div v-for="(file, index) in book.files" :key="index">
                   <b-link @click="downloadFile(book.id, file)">{{file}}</b-link>
-                  <button type="button"
-                          class="btn btn-outline-dark btn-sm"
-                          style="width: 20px;height: 20px">
-                    <img src="../assets/trash.png" width="10%">
-                  </button>
+                  <img src="../assets/trash.png"
+                       width="10%"
+                       v-on:click="deleteFile(book.id, file)">
                   <br>
                 </div>
               </td>
@@ -154,6 +152,21 @@ export default {
     alert: Alert,
   },
   methods: {
+    deleteFile(bookId, filename) {
+      const token = localStorage.getItem('access_token');
+      axios.delete(`http://localhost:5000/file/${bookId}/${filename}`, {
+        headers: { Authorization: `${token}` },
+      })
+        .then(() => {
+          this.getBooks();
+          this.message = 'File deleted!';
+          this.showMessage = true;
+        })
+        .catch(() => {
+          this.message = 'Deletion failed';
+          this.showMessage = true;
+        });
+    },
     submitFile(file, bookId) {
       const formData = new FormData();
       formData.append('file', file);
