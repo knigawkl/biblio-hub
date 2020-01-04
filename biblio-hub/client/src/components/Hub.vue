@@ -22,11 +22,12 @@
             <tr v-for="(book, index) in books" :key="index">
               <td>{{ book.title }}</td>
               <td>
-                <div v-for="(file, index) in book.file" :key="index">
-                  <b-link @click="downloadFile(book.id, book.file)">{{file}}</b-link>
+                <div v-for="(file, index) in book.files" :key="index">
+                  <b-link @click="downloadFile(book.id, file)">{{file}}</b-link>
                   <button type="button"
-                          class="btn btn-danger btn-sm">
-                    X
+                          class="btn btn-outline-dark btn-sm"
+                          style="width: 20px;height: 20px">
+                    <img src="../assets/trash.png" width="10%">
                   </button>
                   <br>
                 </div>
@@ -107,9 +108,7 @@
              title="Add PDF file"
              hide-footer>
       <b-form @submit="onSubmitAddFile" @reset="onResetAddFile" class="w-100">
-        <b-form-group id="form-file-group"
-                      label="PDF File:"
-                      label-for="form-file-input">
+        <b-form-group id="form-file-group">
           <b-form-file
             accept=".pdf"
             id="form-file-input"

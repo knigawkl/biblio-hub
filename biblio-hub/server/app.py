@@ -117,7 +117,7 @@ def get_books():
     for member in db_resp:
         files = db.lrange(f'_{member}', 0, -1)
         book_dict = {'id': member, 'title': db.hget(member, 'title'), 'author': db.hget(member, 'author'),
-                     'year': db.hget(member, 'year'), 'file': files}
+                     'year': db.hget(member, 'year'), 'files': files}
         books.append(book_dict)
     return books
 
