@@ -140,9 +140,6 @@ def single_book(book_id):
         id = book_id
         remove_book(id)
         db.hset(id, 'id', id)
-        db.hset(id, 'title', post_data.get('title'))
-        db.hset(id, 'author', post_data.get('author'))
-        db.hset(id, 'year', post_data.get('year'))
         db.hset(id, 'file', post_data.get('file'))
         db.sadd('books', id)
 
