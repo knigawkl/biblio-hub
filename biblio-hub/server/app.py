@@ -25,8 +25,8 @@ def token_required(f):
             return jsonify({'message': 'Missing token'})
         try:
             payload = jwt.decode(token, app.config['SECRET_KEY'])
-            # if payload['user'] != db.hget(payload['user'], 'login'):
-            #     raise Exception('Login {} could not be found in the db'.format(payload['user']))
+            if payload['user'] != db.hget(payload['user'], 'login'):
+                raise Exception('Login {} could not be found in the db'.format(payload['user']))
         except:
             return jsonify({'message': 'Invalid token'})
         return f(*args, **kwargs)
@@ -116,8 +116,6 @@ def get_books():
     books = []
     db_resp = db.smembers('books')
     for member in db_resp:
-        print("fhkeghfuiowqdhgfjihqwdjkfjkwhqeolfhj9qlfhj")
-        print(member, db.hget(member, 'title'), db.hget(member, 'author'), db.hget(member, 'year'), db.hget(member, 'file'))
         book_dict = {'id': member, 'title': db.hget(member, 'title'), 'author': db.hget(member, 'author'),
                      'year': db.hget(member, 'year'), 'file': db.hget(member, 'file')}
         books.append(book_dict)
@@ -168,7 +166,7 @@ def save_file(file, id):
 
 
 @app.route('/file/<book_id>/<filename>', methods=['POST', 'GET'])
-# @token_required
+@token_required
 def file(book_id, filename):
     if request.method == 'POST':
         file = request.files['file']
