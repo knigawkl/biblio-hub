@@ -105,41 +105,13 @@
              title="Update"
              hide-footer>
       <b-form @submit="onSubmitUpdate" @reset="onResetUpdate" class="w-100">
-      <b-form-group id="form-title-edit-group"
-                    label="Title:"
-                    label-for="form-title-edit-input">
-          <b-form-input id="form-title-edit-input"
-                        type="text"
-                        v-model="editForm.title"
-                        placeholder="Enter title">
-          </b-form-input>
-        </b-form-group>
-        <b-form-group id="form-author-edit-group"
-                      label="Author:"
-                      label-for="form-author-edit-input">
-            <b-form-input id="form-author-edit-input"
-                          type="text"
-                          v-model="editForm.author"
-                          required
-                          placeholder="Enter author">
-            </b-form-input>
-          </b-form-group>
-        <b-form-group id="form-year-group"
-                      label="Year:"
-                      label-for="form-year-input">
-          <b-form-input id="form-year-input"
-                        type="text"
-                        v-model="editForm.year"
-                        required
-                        placeholder="Enter year"/>
-        </b-form-group>
         <b-form-group id="form-file-group"
                       label="PDF File:"
                       label-for="form-file-input">
           <b-form-file
             accept=".pdf"
             id="form-file-input"
-            v-model="editForm.file"
+            v-model="updateForm.file"
             :state=null
             placeholder="Choose a file or drop it here..."
             drop-placeholder="Drop file here..."
@@ -170,11 +142,7 @@ export default {
         year: '',
         file: null,
       },
-      editForm: {
-        id: '',
-        title: '',
-        author: '',
-        year: '',
+      updateForm: {
         file: null,
       },
       message: '',
@@ -246,14 +214,11 @@ export default {
       evt.preventDefault();
       this.$refs.editBookModal.hide();
       const payload = {
-        id: this.editForm.id,
-        title: this.editForm.title,
-        author: this.editForm.author,
-        year: this.editForm.year,
-        file: this.editForm.file.name,
+        id: this.updateForm.id,
+        file: this.updateForm.file.name,
       };
-      this.submitFile(this.editForm.file, payload.id);
-      this.updateBook(payload, this.editForm.id);
+      this.submitFile(this.updateForm.file, payload.id);
+      this.updateBook(payload, this.updateForm.id);
     },
     onResetUpdate(evt) {
       evt.preventDefault();
@@ -262,7 +227,7 @@ export default {
       this.getBooks();
     },
     editBook(book) {
-      this.editForm = book;
+      this.updateForm = book;
     },
     removeBook(bookID) {
       const path = `http://localhost:5000/hub/${bookID}`;
@@ -286,11 +251,11 @@ export default {
       this.addBookForm.author = '';
       this.addBookForm.year = '';
       this.addBookForm.file = '';
-      this.editForm.id = '';
-      this.editForm.title = '';
-      this.editForm.author = '';
-      this.editForm.year = '';
-      this.editForm.file = '';
+      this.updateForm.id = '';
+      this.updateForm.title = '';
+      this.updateForm.author = '';
+      this.updateForm.year = '';
+      this.updateForm.file = '';
     },
     addBook(payload) {
       const path = 'http://localhost:5000/hub/';
