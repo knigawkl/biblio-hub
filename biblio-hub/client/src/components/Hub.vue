@@ -11,11 +11,11 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th scope="col" style="width: 50%">Title</th>
+              <th scope="col" style="width: 40%">Title</th>
               <th scope="col" style="width: 20%">PDF File</th>
               <th scope="col" style="width: 15%">Author</th>
               <th scope="col" style="width: 5%">Year</th>
-              <th style="width: 10%"/>
+              <th style="width: 20%"/>
             </tr>
           </thead>
           <tbody>
@@ -23,6 +23,11 @@
               <td>{{ book.title }}</td>
               <td>
                 <b-link @click="downloadFile(book.id, book.file)">{{book.file}}</b-link>
+                <br>
+                <button type="button"
+                          class="btn btn-danger btn-sm">
+                    Remove
+                  </button>
               </td>
               <td>{{ book.author }}</td>
               <td>{{ book.year }}</td>
@@ -32,7 +37,7 @@
                           class="btn btn-light btn-sm"
                           v-b-modal.book-update-modal
                           @click="editBook(book)">
-                    Update
+                    Add pdf
                   </button>
                   <button type="button"
                           class="btn btn-danger btn-sm"
