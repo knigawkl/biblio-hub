@@ -81,17 +81,49 @@ describe('Add a new book', function() {
   });
 
   it('add file', function () {
-    /*
-    cy.fixture('pdf/start_projektu.pdf').as('file')
-      .get('input[type=file]').then(function(el) {
-        return Cypress.Blob.base64StringToBlob(this.file, 'application/pdf')
-          .then(blob => {
-            el[0].files[0] = blob;
-            el[0].dispatchEvent(new Event('change', {bubbles: true}));
-          })
-      })
+    cy.uploadFile('pdf/start_projektu.pdf', 'input[type=file]', 'application/pdf');
+  });
 
-     */
+  it('submit the new book', function () {
+    cy.contains('Submit').click();
+  });
+});
+
+describe('Add new file', function() {
+  it('open add book popup', function () {
+    cy.contains('Add pdf').click();
+  });
+
+  it('add file', function () {
+    cy.uploadFile('pdf/przepis.pdf', 'input[type=file]', 'application/pdf');
+  });
+
+  it('submit the new file', function () {
+    cy.contains('Update').click();
+  });
+});
+
+describe('Add new book', function() {
+  it('open add book popup', function () {
+    cy.contains('Add Book').click();
+  });
+
+  it('enter title', function () {
+    cy.get('#form-title-input')
+      .type('Homo Deus: A Brief History of Tomorrow');
+  });
+
+  it('enter author', function () {
+    cy.get('#form-author-input')
+      .type('Yuval Noah Harari');
+  });
+
+  it('enter year', function () {
+    cy.get('#form-year-input')
+      .type(2016);
+  });
+
+  it('add file', function () {
     cy.uploadFile('pdf/start_projektu.pdf', 'input[type=file]', 'application/pdf');
   });
 
