@@ -95,7 +95,7 @@ describe('Add new file', function() {
   });
 
   it('add file', function () {
-    cy.uploadFile('pdf/przepis.pdf', 'input[type=file]', 'application/pdf');
+    cy.uploadFile('pdf/przepis.pdf', 'input#form-file-input.custom-file-input', 'application/pdf');
   });
 
   it('submit the new file', function () {
@@ -129,5 +129,24 @@ describe('Add new book', function() {
 
   it('submit the new book', function () {
     cy.contains('Submit').click();
+  });
+});
+
+describe('Download files', function() {
+  it('download 2 files', function () {
+    cy.contains('przepis.pdf').click();
+    cy.contains('start_projektu.pdf').click();
+  });
+});
+
+describe('Delete file', function() {
+  it('click on trash', function () {
+    cy.get('[data-cy=trash]').first().click();
+  });
+});
+
+describe('Delete a book', function() {
+  it('click on delete', function () {
+    cy.contains('Delete').click();
   });
 });

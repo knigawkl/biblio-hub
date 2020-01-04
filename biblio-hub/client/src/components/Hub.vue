@@ -26,7 +26,8 @@
                   <b-link @click="downloadFile(book.id, file)">{{file}}</b-link>
                   <img src="../assets/trash.png"
                        width="10%"
-                       v-on:click="deleteFile(book.id, file)">
+                       v-on:click="deleteFile(book.id, file)"
+                       data-cy="trash">
                   <br>
                 </div>
               </td>
