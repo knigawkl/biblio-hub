@@ -85,11 +85,6 @@ def login():
     auth = request.get_json()
     login, password = auth['login'], auth['password']
 
-    print("fgqwefdwsfdfffdeghdvvfghd")
-    print(db.hget(login, 'password'))
-    print(type(password))
-    print(type(db.hget(login, 'password')))
-
     if auth and bcrypt.checkpw(password.encode('utf8'), db.hget(login, 'password').encode('utf8')):
         token = jwt.encode({'user': auth['login'],
                             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=50)},
