@@ -3,6 +3,7 @@ import jwt
 import redis
 import os
 import errno
+import bcrypt
 from flask import Flask, jsonify, request, redirect, url_for, make_response, send_file, send_from_directory
 from flask_cors import CORS
 from functools import wraps
@@ -67,8 +68,14 @@ def register():
         resp = jsonify('Username available')
     if request.method == 'PUT':
         password, email = req['password'], req['email']
+
+        salt = bcrypt.gensalt()
+        hashed = bcrypt.hashpw(password.encode('utf8'), salt)
+        hashed = hashed.decode("utf-8")
+        print(hashed)
+
         db.hset(login, 'login', login)
-        db.hset(login, 'password', password)
+        db.hset(login, 'password', hashed)
         db.hset(login, 'email', email)
     return resp
 
@@ -77,7 +84,13 @@ def register():
 def login():
     auth = request.get_json()
     login, password = auth['login'], auth['password']
-    if auth and db.hget(login, 'password') == password:
+
+    print("fgqwefdwsfdfffdeghdvvfghd")
+    print(db.hget(login, 'password'))
+    print(type(password))
+    print(type(db.hget(login, 'password')))
+
+    if auth and bcrypt.checkpw(password.encode('utf8'), db.hget(login, 'password').encode('utf8')):
         token = jwt.encode({'user': auth['login'],
                             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=50)},
                            app.config['SECRET_KEY'])
